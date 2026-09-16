@@ -5,7 +5,7 @@ pipeline {
 
         stage('MAVEN_BUILD') {
             steps {
-                sh 'mvn clean package'
+                sh 'mvn -f /mnt/project/pom.xml clean package'
             }
         }
 
