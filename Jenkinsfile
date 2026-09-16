@@ -11,17 +11,11 @@ pipeline {
 
         stage('Deploy') {
             steps {
+               sh 'rm -rf /mnt/servers/apache-tomcat-10.1.59/webapps/LoginWebApp'
                sh 'cp /mnt/project/target/LoginWebApp.war /mnt/servers/apache-tomcat-10.1.59/webapps/LoginWebApp.war'
             }
         }
 
-        stage('Restart Tomcat') {
-            steps {
-                sh '/mnt/servers/apache-tomcat-10.1.59/bin/shutdown.sh || true'
-                sh 'sleep 5'
-                sh '/mnt/servers/apache-tomcat-10.1.59/bin/startup.sh'
-            }
-        }
-
+       
     }
 }
