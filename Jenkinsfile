@@ -1,47 +1,27 @@
-4qgrweadsvx
 pipeline {
-agent {
-label {
-		label "built-in-project"
-		customWorkspace "/data/project-myapp"
-		
-		}
-		}
-		
-	stages {
-		
-		stage ('CLEAN_OLD_M2') {
-			
-			steps {
-				sh "rm -rf /home/saccount/.m2/repository"
-				
-			}
-			
-		}
-	
-		stage ('MAVEN_BUILD') {
-		
-			steps {
-						
-						sh "mvn clean package"
-			
-			}
-			
-		
-		}
-		
-		stage ('COPY_WAR_TO_Server'){
-		
-				steps {
-						
-						sh "scp -r target/LoginWebApp.war saccount@10.0.2.51:/data/project/wars"
+    agent any
 
-						}
-				
-				}
-	
-	
-	
-	}
-		
+    stages {
+
+        stage('MAVEN_BUILD') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh 'cp target/*.war /mnt/servers/apache-tomcat-10.1.59/webapps/'
+            }
+        }
+
+        stage('Restart Tomcat') {
+            steps {
+                sh '/mnt/servers/apache-tomcat-10.1.59/bin/shutdown.sh || true'
+                sh 'sleep 5'
+                sh '/mnt/servers/apache-tomcat-10.1.59/bin/startup.sh'
+            }
+        }
+
+    }
 }
