@@ -5,7 +5,7 @@ pipeline {
 
         stage('MAVEN_BUILD') {
             steps {
-                sh 'mvn -f /mnt/project/pom.xml clean package'
+                sh '/mnt/build-tools/apache-maven-3.9.16/bin/mvn -f /mnt/project/pom.xml clean package'
             }
         }
 
